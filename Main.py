@@ -5,6 +5,14 @@ workers = 1
 workerability = 1
 
 
+def buyworkers():
+    global workers
+    global resource
+    if resource > 20:
+        resource -= 20
+        workers += 1
+
+
 def updateworkers():
     global resource
     resource += (workers * workerability)
@@ -12,6 +20,7 @@ def updateworkers():
 
 def update():
     updateworkers()
+    buyworkers()
     os.system('cls')
     print("You currently have", workers, "workers.\n")
     print("You currently have", resource, "resource.")
