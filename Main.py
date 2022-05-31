@@ -1,7 +1,13 @@
 import time
+import os
+resource = 0
 
 
 def update():
+    global resource
+    os.system('cls')
+    resource += 1
+    print("You currently have", resource, "resource.")
     pass
 
 
