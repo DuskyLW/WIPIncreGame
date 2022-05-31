@@ -1,12 +1,19 @@
 import time
 import os
 resource = 0
+workers = 1
+workerability = 1
+
+
+def updateworkers():
+    global resource
+    resource += (workers * workerability)
 
 
 def update():
-    global resource
+    updateworkers()
     os.system('cls')
-    resource += 1
+    print("You currently have", workers, "workers.\n")
     print("You currently have", resource, "resource.")
     pass
 
