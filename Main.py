@@ -31,7 +31,7 @@ def update():
 def main():
     while True:
         update()
-        time.sleep(.1)
+        time.sleep(.04)
 
 
 if __name__ == "__main__":
