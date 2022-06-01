@@ -1,5 +1,6 @@
 import time
 import os
+import keyboard
 resource = 0
 workers = 1
 workerability = 1
