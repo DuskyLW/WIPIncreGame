@@ -1,21 +1,29 @@
+# Base imports
 import time
 import os
 import keyboard
+# Base variables
 resource = 0
 workers = 0
 workerability = 1
 workercost = 20
 displayworkerwarning = 0
 
+# Checks for player inputs
+
 
 def keyboardlistners():
     keyboard.on_release_key("space", playerfarmresource)
     keyboard.on_release_key("w", buyworkers)
 
+# Lets player farm resource themselves
+
 
 def playerfarmresource(self):
     global resource
     resource += 1
+
+# Lets player buy workers to farm resource for them
 
 
 def buyworkers(self):
@@ -30,10 +38,14 @@ def buyworkers(self):
     else:
         displayworkerwarning = 20
 
+# Applies worker's labor into resource count
+
 
 def updateworkers():
     global resource
     resource += (workers * workerability)
+
+# Handles text output to screen
 
 
 def display():
@@ -52,9 +64,13 @@ def display():
         else:
             displayworkerwarning = 0
 
+# Function for handling program updates per loop
+
 
 def update():
     updateworkers()
+
+# Main loop where everything is executed
 
 
 def main():
@@ -67,5 +83,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-# testing
