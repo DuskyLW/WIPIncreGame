@@ -34,7 +34,7 @@ def buyworkers(self):
     if resource >= workercost:
         resource -= workercost
         workers += 1
-        workercost *= 2
+        workercost = int(workercost * 1.5)
     else:
         displayworkerwarning = 20
 
