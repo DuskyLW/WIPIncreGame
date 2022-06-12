@@ -23,7 +23,7 @@ class Buyable:
             self.amount += 1
 
     def buyalot(self, buytimes):
-        for x in range(buytimes):
+        for singlebuy in range(buytimes):
             self.buy()
 
 
