@@ -1,11 +1,12 @@
 import time
 import os
 import keyboard
+from Resource import Resource
 
 class Game:
 
     def __init__(self):
-        self.resource = 0
+        self.resource = Resource("Stone", -1, 0)
         self.workers = 0
         self.workerability = 1
         self.workercost = 20
@@ -17,32 +18,24 @@ class Game:
 
 
     def playerfarmresource(self, keyInfo):
-        self.resource += 1
+        self.resource.add(1)
 
     def buyworkers(self, keyInfo):
-        if self.resource >= self.workercost:
-            self.resource -= self.workercost
+        if self.resource.spend(self.workercost):
             self.workers += 1
-            self.workercost = int(self.workercost * 1.5)
         else:
-            self.displayworkerwarning = 20
+            displayworkerwarning = 20
 
     def updateworkers(self):
-        self.resource += (self.workers * self.workerability)
+        self.resource.add(self.workers * self.workerability)
 
     def display(self):
         os.system('cls')
         print("You currently have", self.workers, "workers.\n")
-        print("You currently have", self.resource, "resource.")
+        self.resource.display()
         print("Press Spacebar to farm resource!\n")
-        if self.resource >= self.workercost or self.workers > 0:
+        if self.resource.amount >= self.workercost or self.workers > 0:
             print("Press 'W' to buy a worker for", self.workercost, "resource.")
-        if self.displayworkerwarning > 0:
-            if self.resource < self.workercost:
-                print("Not enough resource!")
-                self.displayworkerwarning -= 1
-            else:
-                self.displayworkerwarning = 0
 
     def update(self):
         self.updateworkers()
