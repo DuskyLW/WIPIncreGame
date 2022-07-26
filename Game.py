@@ -2,44 +2,37 @@ import time
 import os
 import keyboard
 from Resource import Resource
+from Producer import Producer
 
 
 class Game:
 
     def __init__(self):
-        self.resource = Resource("Stone", -1, 0)
-        self.workers = 0
-        self.workerability = 1
-        self.workercost = 20
-        self.displayworkerwarning = 0
+        self.resources = [Resource("Stone", -1, 0, True), Resource("Wood", -1, 10)]
+        self.producers = [Producer([self.resources[0]], [20], 0, [
+                                   self.resources[0]], [1], "Worker")]
 
     def keyboardlistners(self):
         keyboard.on_release_key("space", self.playerfarmresource)
         keyboard.on_release_key("w", self.buyworkers)
 
     def playerfarmresource(self, keyInfo):
-        self.resource.add(1)
+        self.resources[0].add(1)
 
     def buyworkers(self, keyInfo):
-        if self.resource.spend(self.workercost):
-            self.workers += 1
-        else:
-            displayworkerwarning = 20
-
-    def updateworkers(self):
-        self.resource.add(self.workers * self.workerability)
+        self.producers[0].buy()
 
     def display(self):
         os.system('cls')
-        print("You currently have", self.workers, "workers.\n")
-        self.resource.display()
+        for resource in self.resources:
+            resource.display()
+        for producer in self.producers:
+            producer.display()
         print("Press Spacebar to farm resource!\n")
-        if self.resource.amount >= self.workercost or self.workers > 0:
-            print("Press 'W' to buy a worker for",
-                  self.workercost, "resource.")
 
     def update(self):
-        self.updateworkers()
+        for producer in self.producers:
+            producer.produce()
 
     def main(self):
         self.keyboardlistners()

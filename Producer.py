@@ -5,7 +5,7 @@ from Resource import Resource
 class Producer(Buyable):
 
     def __init__(self, resources, cost, amount, resourcetype, resourceamount, name):
-        super(resources, cost, amount)
+        super().__init__(resources, cost, amount)
         self.resourcetype = resourcetype
         self.resourceamount = resourceamount
         self.name = name

@@ -1,6 +1,6 @@
 class Resource:
 
-    def __init__(self, name, cap, amount):
+    def __init__(self, name, cap, amount, plural=False):
         self.name = name
         if cap < 0:
             self.cap = float('inf')
@@ -8,6 +8,7 @@ class Resource:
             self.cap = cap
         self.amount = amount
         self.warning = 0
+        self.plural = plural
 
     def add(self, amount):
         self.amount = min(self.cap, self.amount+amount)
@@ -21,7 +22,7 @@ class Resource:
             return False
 
     def display(self):
-        if (self.amount >= 1):
+        if (self.amount >= 1 and self.plural):
             print("You have {amount} {name}s".format(amount=self.amount, name=self.name))
         else:
             print("You have {amount} {name}".format(amount=self.amount, name=self.name))
