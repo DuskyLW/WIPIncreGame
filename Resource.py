@@ -13,13 +13,17 @@ class Resource:
     def add(self, amount):
         self.amount = min(self.cap, self.amount+amount)
 
-    def spend(self, amount):
+    def spend(self, amount, warning=True):
         if amount <= self.amount:
             self.amount -= amount
             return True
         else:
-            self.warning = 20
+            if warning:
+                self.warning = 20
             return False
+
+    def canafford(self, amount):
+        return amount <= self.amount
 
     def display(self):
         if (self.amount >= 1 and self.plural):
