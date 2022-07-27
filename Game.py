@@ -4,6 +4,7 @@ import keyboard
 from Resource import Resource
 from Producer import Producer
 from Converter import Converter
+from Upgrade import Upgrade
 
 
 class Game:
@@ -15,12 +16,15 @@ class Game:
                                    self.resources[0]], [1], "Worker")]
         self.converters = [Converter([self.resources[0]], [20], 0, [
             self.resources[0]], [1], "Builder", [self.resources[2]], [1])]
+        self.upgrades = [Upgrade([self.resources[1]], [1], 0,
+                                 self.producers[0], lambda producer: producer.setMult(100), "Better Pay")]
 
     def keyboardlistners(self):
         keyboard.on_release_key("space", self.playerfarmresource)
         keyboard.on_release_key("w", self.buyworkers)
         keyboard.on_release_key("b", self.buybuilder)
         keyboard.on_release_key("c", self.convertertoggle)
+        keyboard.on_release_key("x", self.buyUpgrade)
 
     def playerfarmresource(self, keyInfo):
         self.resources[0].add(1)
@@ -30,6 +34,9 @@ class Game:
 
     def buybuilder(self, keyInfo):
         self.converters[0].buy()
+
+    def buyUpgrade(self, keyInfo):
+        self.upgrades[0].buy()
 
     def convertertoggle(self, keyInfo):
         self.converters[0].toggle()

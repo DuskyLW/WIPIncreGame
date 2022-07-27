@@ -21,6 +21,8 @@ class Buyable:
             for resource in range(len(self.resources)):
                 self.resources[resource].spend(self.cost[resource])
             self.amount += 1
+            return True
+        return False
 
     def buyalot(self, buytimes):
         for singlebuy in range(buytimes):
