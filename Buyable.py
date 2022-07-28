@@ -8,6 +8,7 @@ class Buyable:
         self.cost = cost
         self.amount = amount
         self.ratio = 1
+        self.flavtext = ""
 
     def canbuy(self):
         adjustedCosts = self.getCost()
@@ -44,6 +45,12 @@ class Buyable:
         for cost in self.cost:
             adjustedCosts.append(cost*self.ratio**self.amount)
         return adjustedCosts
+
+    def setflavtext(self, flavtext):
+        self.flavtext = flavtext
+
+    def getflavtext(self):
+        return self.flavtext
 
 
 if __name__ == "__main__":
