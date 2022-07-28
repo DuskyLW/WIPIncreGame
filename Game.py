@@ -17,7 +17,7 @@ class Game:
         self.converters = [Converter([self.resources[0]], [20], 0, [
             self.resources[0]], [1], "Builder", [self.resources[2]], [1])]
         self.upgrades = [Upgrade([self.resources[1]], [1], 0,
-                                 self.producers[0], lambda producer: producer.setMult(100), "Better Pay")]
+                                 self.converters[0], lambda converter: converter.multiply(100), "Better Pay")]
 
     def keyboardlistners(self):
         keyboard.on_release_key("space", self.playerfarmresource)

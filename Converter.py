@@ -11,13 +11,20 @@ class Converter(Buyable):
         self.converting = False
         self.outputresource = outputresource
         self.outputamount = outputamount
+        self.multiplier = 1
 
     def convert(self):
-        if self.converting and self.canconvert():
-            for resource in range(len(self.convertresource)):
-                self.convertresource[resource].spend((self.convertresourceamount[resource]), False)
-            for outputresource in range(len(self.outputresource)):
-                self.outputresource[outputresource].add(self.outputamount[outputresource])
+        if self.converting:
+            for i in range(self.amount*self.multiplier):
+                if self.canconvert():
+                    for resource in range(len(self.convertresource)):
+                        self.convertresource[resource].spend(
+                            (self.convertresourceamount[resource]), False)
+                    for outputresource in range(len(self.outputresource)):
+                        self.outputresource[outputresource].add(
+                            self.outputamount[outputresource])
+                else:
+                    return
 
     def canconvert(self):
         for resource in range(len(self.convertresource)):
@@ -40,6 +47,12 @@ class Converter(Buyable):
     def updateoutputamount(self, outputamount):
         self.outputamount = outputamount
 
+    def setMultiplier(self, amount):
+        self.multiplier = amount
+
+    def multiply(self, multiplier):
+        self.multiplier *= multiplier
+
     def toggle(self):
         if self.converting:
             self.converting = False
@@ -48,6 +61,14 @@ class Converter(Buyable):
 
     def display(self):
         if (self.amount >= 1):
-            print("You have {amount} {name}s".format(amount=self.amount, name=self.name))
+            print("You have {amount} {name}s".format(
+                amount=self.amount, name=self.name))
         else:
-            print("You have {amount} {name}".format(amount=self.amount, name=self.name))
+            print("You have {amount} {name}".format(
+                amount=self.amount, name=self.name))
+
+
+if __name__ == "__main__":
+    wood = Resource("Wood", 20000, 20000)
+    converter = Converter([wood], [20], 1, [wood], [1], "Worker", [wood], [1])
+    converter.multiply(100)

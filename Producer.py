@@ -9,15 +9,18 @@ class Producer(Buyable):
         self.resourcetype = resourcetype
         self.resourceamount = resourceamount
         self.name = name
-        self.mult = 1
+        self.multiplier = 1
 
     def produce(self):
         for resource in range(len(self.resourcetype)):
             self.resourcetype[resource].add(
-                (self.resourceamount[resource])*self.amount*self.mult)
+                (self.resourceamount[resource])*self.amount*self.multiplier)
 
-    def setMult(self, amount):
-        self.mult = amount
+    def setMultiplier(self, amount):
+        self.multiplier = amount
+
+    def multiply(self, multiplier):
+        self.multiplier *= multiplier
 
     def updatename(self, name):
         self.name = name
@@ -32,3 +35,9 @@ class Producer(Buyable):
         else:
             print("You have {amount} {name}".format(
                 amount=self.amount, name=self.name))
+
+
+if __name__ == "__main__":
+    wood = Resource("Wood", 20000, 20000)
+    producer = Producer([wood], [20], 1, [wood], [1], "Worker")
+    producer.multiply(100)
