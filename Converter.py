@@ -1,75 +1,86 @@
-from Buyable import Buyable
+from Producer import Producer
 from Resource import Resource
 
 
-class Converter(Buyable):
-    def __init__(self, resources, cost, amount, convertresource, convertresourceamount, name, outputresource, outputamount):
-        super().__init__(resources, cost, amount)
-        self.convertresource = convertresource
-        self.convertresourceamount = convertresourceamount
-        self.name = name
-        self.converting = False
-        self.outputresource = outputresource
-        self.outputamount = outputamount
-        self.multiplier = 1
+class Converter(Producer):
+    def __init__(self, name, cost, production, consumption, enabled=False,
+                 amount=0, ratio=1, flavText=None, multiplier=1, efficiency=1):
+        super().__init__(name, cost, production, amount,
+                         ratio, flavText, multiplier)
+        self.consumption = consumption
+        self.efficiency = 1
+        self.enabled = enabled
 
     def convert(self):
-        if self.converting:
-            for i in range(self.amount*self.multiplier):
-                if self.canconvert():
-                    for resource in range(len(self.convertresource)):
-                        self.convertresource[resource].spend(
-                            (self.convertresourceamount[resource]), False)
-                    for outputresource in range(len(self.outputresource)):
-                        self.outputresource[outputresource].add(
-                            self.outputamount[outputresource])
-                else:
-                    return False
-        return True
+        for conversion in range(self.amount):
+            if self.canConsume():
+                self.consume()
+                self.produce()
+            else:
+                break
 
-    def canconvert(self):
-        for resource in range(len(self.convertresource)):
-            if not self.convertresource[resource].canafford(self.convertresourceamount[resource]):
+    def canConsume(self):
+        for resource in self.consumption:
+            if not resource.canAfford(self.consumption[resource]):
                 return False
         return True
 
-    def updatename(self, name):
+    def consume(self):
+        currentConsumption = self.getCurrentConsumption()
+        for resource in currentConsumption:
+            resource.spend(currentConsumption[resource])
+
+    def update(self):
+        if self.enabled:
+            self.convert()
+
+    def getName(self):
+        return self.name
+
+    def setName(self, name):
         self.name = name
 
-    def updateresource(self, convertresource):
-        self.convertresource = convertresource
+    def getEfficiency(self):
+        return self.efficiency
 
-    def updateresourceamount(self, convertresourceamount):
-        self.convertresourceamount = convertresourceamount
+    def setEfficiency(self, efficiency):
+        self.efficiency = efficiency
 
-    def updateoutputresource(self, outputresource):
-        self.outputresource = outputresource
+    def getConsumption(self):
+        return self.consumption
 
-    def updateoutputamount(self, outputamount):
-        self.outputamount = outputamount
+    def setConsumption(self, consumption):
+        self.consumption = consumption
 
-    def setMultiplier(self, amount):
-        self.multiplier = amount
-
-    def multiply(self, multiplier):
-        self.multiplier *= multiplier
+    def getCurrentConsumption(self):
+        currentConsumption = {}
+        for resource in self.consumption:
+            currentConsumption[resource] = self.consumption[resource] / \
+                self.efficiency
+        return currentConsumption
 
     def toggle(self):
-        if self.converting:
-            self.converting = False
+        if self.enabled:
+            self.enabled = False
         else:
-            self.converting = True
-
-    def display(self):
-        if (self.amount >= 1):
-            print("You have {amount} {name}s".format(
-                amount=self.amount, name=self.name))
-        else:
-            print("You have {amount} {name}".format(
-                amount=self.amount, name=self.name))
+            self.enabled = True
 
 
 if __name__ == "__main__":
     wood = Resource("Wood", 20000, 20000)
-    converter = Converter([wood], [20], 1, [wood], [1], "Worker", [wood], [1])
-    converter.multiply(100)
+    stone = Resource("Stone", 0, 20000)
+    converter = Converter("Converter", {wood: 1}, {
+                          stone: 10}, {wood: 1}, enabled=True, amount=1)
+    print(converter, converter.getAmount())
+    print(wood, wood.getAmount())
+    print(stone, stone.getAmount())
+    converter.update()
+    print(converter, converter.getAmount())
+    print(wood, wood.getAmount())
+    print(stone, stone.getAmount())
+    converter.setAmount(10)
+    converter.setEfficiency(20)
+    converter.update()
+    print(converter, converter.getAmount())
+    print(wood, wood.getAmount())
+    print(stone, stone.getAmount())

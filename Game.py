@@ -10,14 +10,26 @@ from Upgrade import Upgrade
 class Game:
 
     def __init__(self):
-        self.resources = [Resource("Stone", -1, 0, True),
-                          Resource("Wood", -1, 10), Resource("Tool", -1, 0, True)]
-        self.producers = [Producer([self.resources[0]], [20], 0, [
-                                   self.resources[0]], [1], "Worker")]
-        self.converters = [Converter([self.resources[0]], [20], 0, [
-            self.resources[0]], [1], "Builder", [self.resources[2]], [1])]
-        self.upgrades = [Upgrade([self.resources[1]], [1], 0,
-                                 self.converters[0], lambda converter: converter.multiply(100), "Better Pay")]
+        self.resources = {"stone": Resource("Stone", 0, -1, True),
+                          "wood": Resource("Wood", 10, -1),
+                          "tool": Resource("Tool", 0, -1, True)}
+        self.producers = {"worker":
+                          Producer("Worker",
+                                   {self.resources["wood"]: 10},
+                                   {self.resources["wood"]: 1})
+                          }
+        self.converters = {"builder":
+                           Converter("Builder",
+                                     {self.resources["wood"]: 10},
+                                     {self.resources["tool"]: 1},
+                                     {self.resources["wood"]: 1})
+                           }
+        self.upgrades = {"better pay":
+                         Upgrade("better pay",
+                                 {self.resources["wood"]: 10},
+                                 self.converters["builder"],
+                                 lambda converter: converter.multiply(10))
+                         }
 
     def keyboardlistners(self):
         keyboard.on_release_key("space", self.playerfarmresource)
@@ -27,35 +39,36 @@ class Game:
         keyboard.on_release_key("x", self.buyUpgrade)
 
     def playerfarmresource(self, keyInfo):
-        self.resources[0].add(1)
+        self.resources["wood"].add(1)
 
     def buyworkers(self, keyInfo):
-        self.producers[0].buy()
+        self.producers["worker"].buy()
 
     def buybuilder(self, keyInfo):
-        self.converters[0].buy()
+        self.converters["builder"].buy()
 
     def buyUpgrade(self, keyInfo):
-        self.upgrades[0].buy()
+        self.upgrades["better pay"].buy()
 
     def convertertoggle(self, keyInfo):
-        self.converters[0].toggle()
+        self.converters["builder"].toggle()
 
     def display(self):
         os.system('cls')
-        for resource in self.resources:
+        for resource in self.resources.values():
             resource.display()
-        for producer in self.producers:
+        for producer in self.producers.values():
             producer.display()
-        for converter in self.converters:
+        for converter in self.converters.values():
             converter.display()
         print("Press Spacebar to farm resource!\n")
+        print(self.upgrades["better pay"])
 
     def update(self):
-        for producer in self.producers:
-            producer.produce()
-        for converter in self.converters:
-            converter.convert()
+        for producer in self.producers.values():
+            producer.update()
+        for converter in self.converters.values():
+            converter.update()
 
     def main(self):
         self.keyboardlistners()
