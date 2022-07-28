@@ -7,10 +7,12 @@ class Buyable:
         self.resources = resources
         self.cost = cost
         self.amount = amount
+        self.ratio = 1
 
     def canbuy(self):
+        adjustedCosts = self.getCost()
         for resource in range(len(self.resources)):
-            if self.resources[resource].amount >= self.cost[resource]:
+            if self.resources[resource].amount >= adjustedCosts[resource]:
                 pass
             else:
                 return False
@@ -34,9 +36,22 @@ class Buyable:
         for singlebuy in range(buytimes):
             self.buy()
 
+    def setRatio(self, ratio):
+        self.ratio = ratio
+
+    def getCost(self):
+        adjustedCosts = []
+        for cost in self.cost:
+            adjustedCosts.append(cost*self.ratio**self.amount)
+        return adjustedCosts
+
 
 if __name__ == "__main__":
     wood = Resource("Wood", 20000, 20000)
     buyable = Buyable([wood], [20], 0)
-    buyable.buyalot(1000)
-    print(buyable.amount)
+    buyable.setRatio(2)
+    print(buyable.getCost())
+    buyable.buy()
+    print(buyable.getCost())
+    buyable.buy()
+    print(buyable.getCost())

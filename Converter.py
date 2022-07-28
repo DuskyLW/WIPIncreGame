@@ -24,7 +24,8 @@ class Converter(Buyable):
                         self.outputresource[outputresource].add(
                             self.outputamount[outputresource])
                 else:
-                    return
+                    return False
+        return True
 
     def canconvert(self):
         for resource in range(len(self.convertresource)):
