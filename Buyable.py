@@ -24,6 +24,12 @@ class Buyable:
             return True
         return False
 
+    def updatecostresources(self, resources):
+        self.resources = resources
+
+    def updatecost(self, cost):
+        self.cost = cost
+
     def buyalot(self, buytimes):
         for singlebuy in range(buytimes):
             self.buy()

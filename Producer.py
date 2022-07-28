@@ -19,6 +19,12 @@ class Producer(Buyable):
     def setMult(self, amount):
         self.mult = amount
 
+    def updatename(self, name):
+        self.name = name
+
+    def updateresource(self, resourcetype):
+        self.resourcetype = resourcetype
+
     def display(self):
         if (self.amount >= 1):
             print("You have {amount} {name}s".format(

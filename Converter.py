@@ -25,6 +25,21 @@ class Converter(Buyable):
                 return False
         return True
 
+    def updatename(self, name):
+        self.name = name
+
+    def updateresource(self, convertresource):
+        self.convertresource = convertresource
+
+    def updateresourceamount(self, convertresourceamount):
+        self.convertresourceamount = convertresourceamount
+
+    def updateoutputresource(self, outputresource):
+        self.outputresource = outputresource
+
+    def updateoutputamount(self, outputamount):
+        self.outputamount = outputamount
+
     def toggle(self):
         if self.converting:
             self.converting = False
