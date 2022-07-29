@@ -3,11 +3,11 @@ from Buyable import Buyable
 
 class Upgrade(Buyable):
 
-    def __init__(self, resources, cost, amount, target, effect, name):
-        super().__init__(resources, cost, amount)
+    def __init__(self, name, cost, target, effect,
+                 amount=0, ratio=1, flavText=None):
+        super().__init__(name, cost, amount, ratio, flavText)
         self.target = target
         self.effect = effect
-        self.name = name
 
     def buy(self):
         if super().buy():

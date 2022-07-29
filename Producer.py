@@ -4,17 +4,18 @@ from Resource import Resource
 
 class Producer(Buyable):
 
-    def __init__(self, resources, cost, amount, resourcetype, resourceamount, name):
-        super().__init__(resources, cost, amount)
-        self.resourcetype = resourcetype
-        self.resourceamount = resourceamount
-        self.name = name
-        self.multiplier = 1
+    def __init__(self, name, cost, production, amount=0,
+                 ratio=1, flavText=None, multiplier=1):
+        super().__init__(name, cost, amount, ratio, flavText)
+        self.production = production
+        self.multiplier = multiplier
 
     def produce(self):
-        for resource in range(len(self.resourcetype)):
-            self.resourcetype[resource].add(
-                (self.resourceamount[resource])*self.amount*self.multiplier)
+        for resource in self.production:
+            resource.add(self.production[resource]*self.amount*self.multiplier)
+
+    def update(self):
+        self.produce()
 
     def setMultiplier(self, amount):
         self.multiplier = amount
@@ -22,22 +23,45 @@ class Producer(Buyable):
     def multiply(self, multiplier):
         self.multiplier *= multiplier
 
-    def updatename(self, name):
-        self.name = name
+    def getProduction(self):
+        return self.production
 
-    def updateresource(self, resourcetype):
-        self.resourcetype = resourcetype
+    def setProduction(self, production):
+        self.production = production
 
-    def display(self):
-        if (self.amount >= 1):
-            print("You have {amount} {name}s".format(
-                amount=self.amount, name=self.name))
-        else:
-            print("You have {amount} {name}".format(
-                amount=self.amount, name=self.name))
+    def getCurrentProduction(self):
+        currentProduction = {}
+        for resource in self.production:
+            currentProduction[resource] = self.production[resource] * \
+                self.multiplier
+        return currentProduction
+
+    def getTotalProduction(self):
+        totalProduction = {}
+        for resource in self.production:
+            totalProduction[resource] = self.production[resource] * \
+                self.multiplier * self.amount
+        return totalProduction
 
 
 if __name__ == "__main__":
     wood = Resource("Wood", 20000, 20000)
-    producer = Producer([wood], [20], 1, [wood], [1], "Worker")
-    producer.multiply(100)
+    stone = Resource("Stone", 0, 20000)
+    producer = Producer("Worker", {wood: 10}, {stone: 1}, ratio=2)
+    print(producer, producer.getAmount())
+    print(wood, wood.getAmount())
+    print(stone, stone.getAmount())
+    producer.buy()
+    print(producer, producer.getAmount())
+    print(wood, wood.getAmount())
+    print(stone, stone.getAmount())
+    producer.produce()
+    print(producer, producer.getAmount())
+    print(wood, wood.getAmount())
+    print(stone, stone.getAmount())
+    producer.buy()
+    producer.multiply(2)
+    producer.produce()
+    print(producer, producer.getAmount())
+    print(wood, wood.getAmount())
+    print(stone, stone.getAmount())
