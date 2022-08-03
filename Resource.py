@@ -51,6 +51,12 @@ class Resource:
         else:
             self.cap = cap
 
+    def getPercent(self):
+        if self.cap <= 0:
+            return 0
+        else:
+            return self.amount/self.cap
+
     def __repr__(self):
         return self.name + " Resource"
 
