@@ -16,9 +16,9 @@
 
 class Resource:
 
-    # Takes a name, amount, amount cap and flag for denoting if you would like
-    # plural added to your amount to display sentence. If the cap less than 0,
-    # set it to an infinite float, otherwise make it the cap argument.
+# Takes a name, amount, amount cap and flag for denoting if you would like
+# plural added to your amount to display sentence. If the cap less than 0,
+# set it to an infinite float, otherwise make it the cap argument.
     def __init__(self, name, amount, cap, plural=False):
         self.name = name
         if cap < 0:

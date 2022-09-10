@@ -19,13 +19,22 @@ from Resource import Resource
 
 class Buyable:
 
+# Takes a name for the buyable object, cost to buy, amount to buy
     def __init__(self, name, cost, amount=0, ratio=1, flavText=None):
+        self.name = name
         self.cost = cost
         self.amount = amount
-        self.name = name
         self.ratio = ratio
         self.flavText = flavText
 
+# Using an empty dictionary, we iterate 
+    def getCurrentCost(self):
+        currentCost = {}
+        for resource in self.cost:
+            currentCost[resource] = self.cost[resource]*self.ratio**self.amount
+        return currentCost
+
+# Assigns currentCost a value based on result from getCurrentCost method.
     def canbuy(self):
         currentCost = self.getCurrentCost()
         for resource in currentCost:
@@ -33,6 +42,7 @@ class Buyable:
                 return False
         return True
 
+# Assigns currentCost a value based on result from getCurrentCost method.
     def buy(self):
         currentCost = self.getCurrentCost()
         if self.canbuy():
@@ -42,10 +52,16 @@ class Buyable:
             return True
         return False
 
+# Function that performs the buy method as many times as specficied by the
+# argument. Using a for loop to iterate through a range of numbers as long
+# as the argument inputted as a means of repeating the method.
     def buyX(self, buytimes):
         for singlebuy in range(buytimes):
             self.buy()
 
+# If amount is greater than or equal to 1 and plural flag is true, return a
+# string for what you have with a plural, else return a string as a singular
+# sentence.
     def display(self):
         if (self.amount >= 1):
             print("You have {amount} {name}s".format(
@@ -54,33 +70,35 @@ class Buyable:
             print("You have {amount} {name}".format(
                 amount=self.amount, name=self.name))
 
+# Can be called and returns the current cost of the instance.
     def getCost(self):
         return self.cost
 
+# Takes a number as arg and assigns it to the instance as the cost.
     def setCost(self, cost):
         self.cost = cost
 
+# Can be called and returns the current amount of the instance.
     def getAmount(self):
         return self.amount
 
+# Takes a number as arg and assigns it to the instance as the amount.
     def setAmount(self, amount):
         self.amount = amount
 
-    def getCurrentCost(self):
-        currentCost = {}
-        for resource in self.cost:
-            currentCost[resource] = self.cost[resource]*self.ratio**self.amount
-        return currentCost
-
+# Can be called and returns the current ratio of the instance.
     def getRatio(self):
         return self.ratio
 
+# Takes a number as arg and assigns it to the instance as the ratio.
     def setRatio(self, ratio):
         self.ratio = ratio
 
+# Can be called and returns the flavor text assigned to the instance.
     def getFlavText(self):
         return self.flavText
 
+# Takes a string as arg and assigns it to the instance it's flavor text.
     def setFlavText(self, flavText):
         self.flavText = flavText
 
