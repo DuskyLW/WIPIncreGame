@@ -19,7 +19,7 @@ from Resource import Resource
 
 class Buyable:
 
-# Takes a name for the buyable object, cost to buy, amount to buy
+    # Takes a name for the buyable object, cost to buy, amount to buy
     def __init__(self, name, cost, amount=0, ratio=1, flavText=None):
         self.name = name
         self.cost = cost
@@ -27,14 +27,19 @@ class Buyable:
         self.ratio = ratio
         self.flavText = flavText
 
-# Using an empty dictionary, we iterate 
+# Using an empty dictionary, we iterate through the resources that are buyable
+# and return the current cost of each buyable thing using the formula of taking
+# the current cost, mulitplying that by the ratio or amount extra to cost each
+# new buy and do exponent based on the amount of times the thing has been bought.
     def getCurrentCost(self):
         currentCost = {}
         for resource in self.cost:
             currentCost[resource] = self.cost[resource]*self.ratio**self.amount
         return currentCost
 
-# Assigns currentCost a value based on result from getCurrentCost method.
+# Assigns currentCost a value based on result from getCurrentCost method. Based
+# on the result of the canAfford method from resource, if we can't afford then
+# return false, otherwise return True.
     def canbuy(self):
         currentCost = self.getCurrentCost()
         for resource in currentCost:
@@ -42,7 +47,10 @@ class Buyable:
                 return False
         return True
 
-# Assigns currentCost a value based on result from getCurrentCost method.
+# Assigns currentCost a value based on result from getCurrentCost method. If
+# we can afford buying, perform the spend method from resource to perform the
+# buy, then increment the amount of times bought by 1 and return True.
+# Otherwise return False.
     def buy(self):
         currentCost = self.getCurrentCost()
         if self.canbuy():

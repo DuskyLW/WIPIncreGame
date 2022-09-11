@@ -16,9 +16,9 @@
 
 class Resource:
 
-# Takes a name, amount, amount cap and flag for denoting if you would like
-# plural added to your amount to display sentence. If the cap less than 0,
-# set it to an infinite float, otherwise make it the cap argument.
+    # Takes a name, amount, amount cap and flag for denoting if you would like
+    # plural added to your amount to display sentence. If the cap less than 0,
+    # set it to an infinite float, otherwise make it the cap argument.
     def __init__(self, name, amount, cap, plural=False):
         self.name = name
         if cap < 0:
@@ -35,8 +35,8 @@ class Resource:
         self.amount = min(self.cap, self.amount+amount)
 
 # Takes amount to subtract as arg and checks it against current amount, if
-# amount to subtract is less than or equal to current amount, subtract it. Otherwise,
-# check warning flag for true then make the tick count 20.
+# amount to subtract is less than or equal to current amount, subtract it.
+# Otherwise, check warning flag for true then make the tick count 20.
     def spend(self, amount, warning=True):
         if amount <= self.amount:
             self.amount -= amount
@@ -79,15 +79,15 @@ class Resource:
     def getCap(self):
         return self.cap
 
-# Takes an amount as arg and if the number is a negative, make the cap infinite,
-# otherwise set the arg as the cap.
+# Takes an amount as arg and if the number is a negative, make the cap
+# infinite, otherwise set the arg as the cap.
     def setCap(self, cap):
         if cap < 0:
             self.cap = float('inf')
         else:
             self.cap = cap
 
-# Returns the ratio of current amount over cap
+# Returns the ratio of current amount over cap.
     def getPercent(self):
         if self.cap == 0:
             return 0
