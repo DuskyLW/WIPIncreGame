@@ -19,7 +19,10 @@ from Resource import Resource
 
 class Buyable:
 
-    # Takes a name for the buyable object, cost to buy, amount to buy
+    # Takes a name for the buyable object, cost to buy, the amount that has
+    # already been bought/ current iteration of amount of times bought, a ratio
+    # that describes how much extra each new upgrade will cost, and a flavor
+    # text for the object.
     def __init__(self, name, cost, amount=0, ratio=1, flavText=None):
         self.name = name
         self.cost = cost
@@ -30,7 +33,7 @@ class Buyable:
 # Using an empty dictionary, we iterate through the resources that are buyable
 # and return the current cost of each buyable thing using the formula of taking
 # the current cost, mulitplying that by the ratio or amount extra to cost each
-# new buy and do exponent based on the amount of times the thing has been bought.
+# new buy and do exponent based on the amount of times object has been bought.
     def getCurrentCost(self):
         currentCost = {}
         for resource in self.cost:

@@ -19,13 +19,22 @@ from Buyable import Buyable
 
 class Upgrade(Buyable):
 
+    # Takes a name for the upgrade object, cost to buy, the target to upgrade,
+    # the effect of the upgrade, the amount that has already been
+    # bought/ current iteration of amount of times bought, a ratio that
+    # describes how much extra each new upgrade will cost, and a flavor text
+    # for the object.
     def __init__(self, name, cost, target, effect,
                  amount=0, ratio=1, flavText=None):
+        # The super().__init__ allows for access to the methods of
+        # Buyable from within Upgrade.
         super().__init__(name, cost, amount, ratio, flavText)
         self.target = target
         self.effect = effect
 
+# Based on the method from Buyable, if the upgrade is affordable, it is bought
+# follow by the effect of the upgrade applying to the target to upgrade.
     def buy(self):
         if super().buy():
-            # apply the effect to target
+            # Apply the effect to target
             self.effect(self.target)
