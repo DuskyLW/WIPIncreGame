@@ -21,31 +21,40 @@ from Resource import Resource
 from Producer import Producer
 from Converter import Converter
 from Upgrade import Upgrade
+from Modifier import Modifier
 
 
 class Game:
 
     def __init__(self):
+        self.tickspeed = 1
         self.resources = {"stone": Resource("Stone", 0, -1, True),
                           "wood": Resource("Wood", 10, -1),
                           "tool": Resource("Tool", 0, -1, True)}
         self.producers = {"worker":
                           Producer("Worker",
-                                   {self.resources["wood"]: 10},
+                                   {self.resources["wood"]: 1},
                                    {self.resources["wood"]: 1})
                           }
         self.converters = {"builder":
-                           Converter("Builder",
-                                     {self.resources["wood"]: 10},
-                                     {self.resources["tool"]: 1},
-                                     {self.resources["wood"]: 1})
-                           }
-        self.upgrades = {"better pay":
-                         Upgrade("better pay",
-                                 {self.resources["wood"]: 10},
-                                 self.converters["builder"],
-                                 lambda converter: converter.multiply(10))
-                         }
+                            Converter("builders", 
+                                    {self.resources["wood"]: 10},
+                                    {self.resources["stone"]: 1},
+                                    {self.resources["wood"]:2},
+                                    enabled=True)
+                            }
+        self.upgrades = {"better pay": 
+                            Upgrade("Better Pay", 
+                                    {self.resources["stone"]: 1},
+                                    self.producers["worker"],
+                                    lambda target: target.addModifier(Modifier(lambda items: 100), "multiplier_production")),
+                        "replication":
+                            Upgrade("Replication",
+                                    {self.resources["wood"]: 200},
+                                    self.producers["worker"],
+                                    lambda target: target.addModifier(Modifier(lambda items: items.getAmount(), self.producers["worker"]), "linear_production")) 
+                            
+                            }
 
     def keyboardlistners(self):
         keyboard.on_release_key("space", self.playerfarmresource)
@@ -65,10 +74,11 @@ class Game:
 
     def buyUpgrade(self, keyInfo):
         self.upgrades["better pay"].buy()
+        self.upgrades["replication"].buy()    
 
     def convertertoggle(self, keyInfo):
         self.converters["builder"].toggle()
-
+    
     def display(self):
         os.system('cls')
         for resource in self.resources.values():
@@ -77,21 +87,25 @@ class Game:
             producer.display()
         for converter in self.converters.values():
             converter.display()
+            print(converter.enabled)
         print("Press Spacebar to farm resource!\n")
         print(self.upgrades["better pay"])
 
-    def update(self):
+    def update(self, delta):
         for producer in self.producers.values():
-            producer.update()
+            producer.update(delta)
         for converter in self.converters.values():
-            converter.update()
+            converter.update(delta)
 
     def main(self):
         self.keyboardlistners()
+        lastTime = time.time()
         while True:
-            self.update()
+            currentTime = time.time()
+            delta = (currentTime-lastTime)/self.tickspeed
+            lastTime=currentTime
+            self.update(delta)
             self.display()
-            time.sleep(.04)
 
 
 if __name__ == "__main__":

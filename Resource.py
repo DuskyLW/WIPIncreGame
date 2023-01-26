@@ -46,6 +46,11 @@ class Resource:
                 self.warning = 20
             return False
 
+    def getSpendPercent(self, amount):
+        if amount == 0:
+            return 1
+        return min(1, self.amount/amount)
+
 # Takes an amount as arg and checks if the amount is less than or equal to
 # current amount, returns boolean based on evaluation.
     def canAfford(self, amount):

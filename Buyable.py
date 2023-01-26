@@ -15,17 +15,15 @@
 #    limitations under the License.
 
 from Resource import Resource
+from Ownable import Ownable
 
-
-class Buyable:
+class Buyable(Ownable):
 
     # Takes a name for the buyable object, cost to buy, amount to buy
-    def __init__(self, name, cost, amount=0, ratio=1, flavText=None):
-        self.name = name
+    def __init__(self, name, cost, amount=0, cap=-1, ratio=1, flavText=None):
+        super().__init__(name, amount, cap, flavText)
         self.cost = cost
-        self.amount = amount
         self.ratio = ratio
-        self.flavText = flavText
 
 # Using an empty dictionary, we iterate through the resources that are buyable
 # and return the current cost of each buyable thing using the formula of taking
@@ -41,6 +39,11 @@ class Buyable:
 # on the result of the canAfford method from resource, if we can't afford then
 # return false, otherwise return True.
     def canbuy(self):
+        test = self.cap
+        test1 = self.amount
+        test3 = self.amount>=self.cap
+        if self.cap>=0 and self.amount>=self.cap:
+            return False
         currentCost = self.getCurrentCost()
         for resource in currentCost:
             if not resource.canAfford(currentCost[resource]):
@@ -86,14 +89,6 @@ class Buyable:
     def setCost(self, cost):
         self.cost = cost
 
-# Can be called and returns the current amount of the instance.
-    def getAmount(self):
-        return self.amount
-
-# Takes a number as arg and assigns it to the instance as the amount.
-    def setAmount(self, amount):
-        self.amount = amount
-
 # Can be called and returns the current ratio of the instance.
     def getRatio(self):
         return self.ratio
@@ -101,14 +96,6 @@ class Buyable:
 # Takes a number as arg and assigns it to the instance as the ratio.
     def setRatio(self, ratio):
         self.ratio = ratio
-
-# Can be called and returns the flavor text assigned to the instance.
-    def getFlavText(self):
-        return self.flavText
-
-# Takes a string as arg and assigns it to the instance it's flavor text.
-    def setFlavText(self, flavText):
-        self.flavText = flavText
 
     def __repr__(self):
         return self.name + " Buyable"

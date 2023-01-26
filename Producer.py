@@ -20,44 +20,27 @@ from Resource import Resource
 
 class Producer(Buyable):
 
-    def __init__(self, name, cost, production, amount=0,
-                 ratio=1, flavText=None, multiplier=1):
-        super().__init__(name, cost, amount, ratio, flavText)
+    def __init__(self, name, cost, production, amount=0, cap=-1,
+                 ratio=1, flavText=None):
+        Buyable.__init__(self, name,cost, amount=amount, cap=cap, ratio=ratio, flavText=flavText)
         self.production = production
-        self.multiplier = multiplier
 
-    def produce(self):
+    def produce(self, delta=1):
+        linear = sum(self.getModifiers("linear_production"))
+        multiplier = 1
+        for i in self.getModifiers("multiplier_production"):
+            multiplier*= i
         for resource in self.production:
-            resource.add(self.production[resource]*self.amount*self.multiplier)
+            resource.add((self.production[resource] + linear)*self.amount*multiplier*delta)
 
-    def update(self):
-        self.produce()
-
-    def setMultiplier(self, amount):
-        self.multiplier = amount
-
-    def multiply(self, multiplier):
-        self.multiplier *= multiplier
+    def update(self, delta=1):
+        self.produce(delta)
 
     def getProduction(self):
         return self.production
 
     def setProduction(self, production):
         self.production = production
-
-    def getCurrentProduction(self):
-        currentProduction = {}
-        for resource in self.production:
-            currentProduction[resource] = self.production[resource] * \
-                self.multiplier
-        return currentProduction
-
-    def getTotalProduction(self):
-        totalProduction = {}
-        for resource in self.production:
-            totalProduction[resource] = self.production[resource] * \
-                self.multiplier * self.amount
-        return totalProduction
 
 
 if __name__ == "__main__":

@@ -39,8 +39,11 @@ class Modifiable():
     def clearModifiers(self):
         self.modifers = {}
 
-    def getModifers(self, label):
-        return [modifier.value() for modifier in self.modifiers[label]]
+    def getModifiers(self, label):
+        if label in self.modifiers:
+            return [modifier.value() for modifier in self.modifiers[label]]
+        else:
+            return []
 
 
 if __name__=="__main__":
@@ -49,4 +52,4 @@ if __name__=="__main__":
     mult2 = Modifier(lambda items: 6)
     modifiable.addModifier(mult1, "linear")
     modifiable.addModifier(mult2, "linear")
-    print(modifiable.getModifers("linear"))
+    print(modifiable.getModifiers("linear"))
